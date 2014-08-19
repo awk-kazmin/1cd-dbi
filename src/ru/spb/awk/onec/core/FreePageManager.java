@@ -11,8 +11,8 @@ public class FreePageManager {
 	//private long mSize;
 	private Head mHead;
 
-	public FreePageManager(ByteBuffer pBuf) {
-		mHead = PageHead.createSecondHead(pBuf);
+	public FreePageManager(PageManager pPageManager, ByteBuffer pBuf) {
+		mHead = PageHead.createSecondHead(pPageManager, pBuf);
 	}
 
 	public long getSize() {

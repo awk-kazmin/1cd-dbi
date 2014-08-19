@@ -1,9 +1,12 @@
 package ru.spb.awk.onec.core.head;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.Version;
 
 
@@ -28,8 +31,9 @@ public class PageHead extends FirstPage {
 		return inst;
 	}
 	
-	public static Head createSecondHead(ByteBuffer pByteBuffer) {
+	public static Head createSecondHead(PageManager pPageManager, ByteBuffer pByteBuffer) {
 		PageHead inst = new PageHead();
+		inst.mManager = pPageManager;
 		ByteBuffer bb = pByteBuffer;
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		bb.position(0);
@@ -83,8 +87,8 @@ public class PageHead extends FirstPage {
 		return blocks.get(pX);
 	}
 
-	public static Head createSecondHead(ByteBuffer pPage, int pRecordSize) {
-		PageHead h = (PageHead) createSecondHead(pPage); 
+	public static Head createSecondHead(PageManager pPageManager, ByteBuffer pPage, int pRecordSize) {
+		PageHead h = (PageHead) createSecondHead(pPageManager, pPage); 
 		h.setRecordSize(pRecordSize);
 		return h;
 	}
@@ -101,4 +105,28 @@ public class PageHead extends FirstPage {
 		return mMaxBlocks;
 	}
 
+	@Override
+	public ByteBuffer readBlock(int pIndx) {
+		int i1 = pIndx / (1023 * mRecordsOnPage);
+		int i2 = (pIndx - i1) / mRecordsOnPage;
+		int i3 = (pIndx - i1 - i2) * mRecordSize;
+		try {
+			return getBlock(i1, i2, i3);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private ByteBuffer getBlock(int i1, int i2, int i3)
+			throws FileNotFoundException, IOException {
+		int indx = getIndx(i1);
+		ByteBuffer buff = mManager.getPage(indx);
+		buff.position(i2*4+4);
+		buff.order(ByteOrder.LITTLE_ENDIAN);
+		buff = mManager.getPage(buff.getInt());
+		buff.position(i3);
+		buff.order(ByteOrder.LITTLE_ENDIAN);
+		return buff;
+	}
 }

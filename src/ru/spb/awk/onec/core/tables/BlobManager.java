@@ -22,7 +22,7 @@ public class BlobManager {
 	private PageManager pageManager;
 
 	public BlobManager(PageManager pPageManager, Table pT) throws FileNotFoundException, IOException {
-		head = PageHead.createSecondHead(pPageManager.getPage(pT.getBlobPage()), BLOB_BLOCK_SIZE);
+		head = PageHead.createSecondHead(pPageManager, pPageManager.getPage(pT.getBlobPage()), BLOB_BLOCK_SIZE);
 		pageManager = pPageManager;
 	}
 
@@ -52,13 +52,7 @@ public class BlobManager {
 
 	private int readBlock(int indx, int len, ByteBuffer blob)
 			throws FileNotFoundException, IOException {
-		int i1;
-		int i2;
-		int i3;
-		i1 = indx/ALL_BLOCKS; // Смещение в блоках 16 * 1023
-		i2 = (indx - i1*ALL_BLOCKS) / BLOCKS_ON_PAGE ; // Смещение в индексной странице
-		i3 = (indx - i1*ALL_BLOCKS - i2*BLOCKS_ON_PAGE)*BLOB_BLOCK_SIZE; // Смещение в данных
-		ByteBuffer buff = getBlock(i1, i2, i3);
+		ByteBuffer buff = head.readBlock(indx);
 		int nextblock = buff.getInt();
 		int clen = buff.getShort();
 		byte[] bufb = new byte[BLOCK_DATA_SIZE];
@@ -67,18 +61,10 @@ public class BlobManager {
 		if(clen!=0 && length>clen) length = clen;
 		blob.put(bufb, 0, length);
 		return nextblock;
+		
 	}
 
-	private ByteBuffer getBlock(int i1, int i2, int i3)
-			throws FileNotFoundException, IOException {
-		ByteBuffer buff = pageManager.getPage(head.getIndx(i1));
-		buff.position(i2*4+4);
-		buff.order(ByteOrder.LITTLE_ENDIAN);
-		buff = pageManager.getPage(buff.getInt());
-		buff.position(i3);
-		buff.order(ByteOrder.LITTLE_ENDIAN);
-		return buff;
-	}
+
 
 
 

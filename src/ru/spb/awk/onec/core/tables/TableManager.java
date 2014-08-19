@@ -32,7 +32,7 @@ public class TableManager {
 	}
 
 	private void setupPageManager(ByteBuffer pBuf) throws FileNotFoundException, IOException {
-		Head head = PageHead.createSecondHead(pBuf);
+		Head head = PageHead.createSecondHead(mPageManager, pBuf);
 		DataScanner ds = new DataScanner(mPageManager, head);
 		if(ds.hasNext()) {
 			ByteBuffer bb = ds.next();
@@ -72,7 +72,7 @@ public class TableManager {
 	}
 
 	private void createTable(int pI) throws FileNotFoundException, IOException {
-		Head head = PageHead.createSecondHead(mPageManager.getPage(pI));
+		Head head = PageHead.createSecondHead(mPageManager, mPageManager.getPage(pI));
 		DataScanner ds = new DataScanner(mPageManager, head);
 		StringBuilder sb = new StringBuilder();
 		while(ds.hasNext()) {

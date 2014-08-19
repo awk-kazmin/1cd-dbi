@@ -24,7 +24,7 @@ public class RecordScanner implements Iterable<ByteBuffer>, Iterator<ByteBuffer>
 		mPageManager = pPageManager;
 		mTable = pTable;
 		ByteBuffer bb = mPageManager.getPage(mTable.getRecordPage());
-		mTOCHead = PageHead.createSecondHead(bb);
+		mTOCHead = PageHead.createSecondHead(pPageManager, bb);
 		ds = new DataScanner(mPageManager, mTOCHead);
 		if(ds.hasNext()) {
 			buffer = ds.next();

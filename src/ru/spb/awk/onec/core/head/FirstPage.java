@@ -1,5 +1,8 @@
 package ru.spb.awk.onec.core.head;
 
+import java.nio.ByteBuffer;
+
+import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.Version;
 
 
@@ -9,6 +12,7 @@ public class FirstPage implements Head {
 	Version mVerDB;
 	long mPages;
 	long mVer;
+	PageManager mManager;
 
 	FirstPage() {
 
@@ -82,6 +86,11 @@ public class FirstPage implements Head {
 	@Override
 	public int getMaxBlocks() {
 		return 1018*1023;
+	}
+
+	@Override
+	public ByteBuffer readBlock(int pIndx) {
+		return null;
 	}
 
 

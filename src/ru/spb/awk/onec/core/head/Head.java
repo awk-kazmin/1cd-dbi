@@ -1,5 +1,7 @@
 package ru.spb.awk.onec.core.head;
 
+import java.nio.ByteBuffer;
+
 import ru.spb.awk.onec.core.Version;
 
 public interface Head {
@@ -21,5 +23,7 @@ public interface Head {
 	public abstract int getIndx(int pX);
 
 	public abstract int getMaxBlocks();
+
+	public abstract ByteBuffer readBlock(int pIndx);
 
 }

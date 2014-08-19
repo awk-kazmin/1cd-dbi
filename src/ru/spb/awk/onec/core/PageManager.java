@@ -43,7 +43,7 @@ public class PageManager {
 			is.read(buf);
 			mDBHead = PageHead.createFirstHead(ByteBuffer.wrap(buf));
 			is.read(buf);
-			mFPM = new FreePageManager(ByteBuffer.wrap(buf));
+			mFPM = new FreePageManager(this, ByteBuffer.wrap(buf));
 			is.read(buf);
 			mTableManager = new TableManager(this, ByteBuffer.wrap(buf));
 		}
