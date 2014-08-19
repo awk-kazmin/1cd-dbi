@@ -19,7 +19,7 @@ public class DBManagerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		f = new File("c:\\db\\1c\\it\\store\\1cv8ddb.1CD");
+		f = new File("resourse\\1cv8ddb.1CD");
 		manager = new DBManager();
 	}
 

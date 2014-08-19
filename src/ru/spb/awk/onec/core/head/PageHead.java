@@ -57,6 +57,10 @@ public class PageHead extends FirstPage {
 	private long mVer1;
 	private long mVer2;
 	private List<Integer> blocks = new ArrayList<>();
+	private int mRecordSize    = 0x1000;
+	private int mRecordsOnPage = 1;
+	private int mPagesOnRecord = 1;
+	private int mMaxBlocks	   = 1018*1023;
 
 	private PageHead() {
 
@@ -79,5 +83,22 @@ public class PageHead extends FirstPage {
 		return blocks.get(pX);
 	}
 
+	public static Head createSecondHead(ByteBuffer pPage, int pRecordSize) {
+		PageHead h = (PageHead) createSecondHead(pPage); 
+		h.setRecordSize(pRecordSize);
+		return h;
+	}
+
+	private void setRecordSize(int pRecordSize) {
+		mRecordSize     = pRecordSize;
+		mRecordsOnPage  = 0x1000/mRecordSize;
+		mPagesOnRecord  = mRecordSize/0x1000;
+		mMaxBlocks		= super.getMaxBlocks() * 0x1000 / mRecordSize;
+	}
+
+	@Override
+	public int getMaxBlocks() {
+		return mMaxBlocks;
+	}
 
 }

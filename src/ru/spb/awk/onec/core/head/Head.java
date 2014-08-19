@@ -20,4 +20,6 @@ public interface Head {
 
 	public abstract int getIndx(int pX);
 
+	public abstract int getMaxBlocks();
+
 }

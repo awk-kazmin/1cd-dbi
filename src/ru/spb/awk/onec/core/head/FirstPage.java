@@ -79,5 +79,10 @@ public class FirstPage implements Head {
 		return 0;
 	}
 
+	@Override
+	public int getMaxBlocks() {
+		return 1018*1023;
+	}
+
 
 }
