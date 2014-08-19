@@ -56,6 +56,11 @@ public class DBManagerTest {
 		for(Index f : t.indexes()) {
 			assertNotNull(f);
 		}
+		Index i = t.getIndex("OBJID");
+		Records records = db.getTableScaner(t, i);
+		for(Map<String, Object> r : records) {
+			assertNotNull(r);
+		}
 		db.close();
 	}
 	
