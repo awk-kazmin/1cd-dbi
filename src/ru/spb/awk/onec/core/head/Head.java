@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 import ru.spb.awk.onec.core.Version;
 
-public interface Head {
+public interface Head extends Iterable<ByteBuffer> {
 
 	public abstract long getPages();
 

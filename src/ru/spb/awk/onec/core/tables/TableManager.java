@@ -7,12 +7,12 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.head.Head;
 import ru.spb.awk.onec.core.head.PageHead;
-import ru.spb.awk.onec.core.scanners.DataScanner;
 import ru.spb.awk.onec.dbi.Table;
 import ru.spb.awk.onec.text.OneCParser;
 
@@ -33,7 +33,7 @@ public class TableManager {
 
 	private void setupPageManager(ByteBuffer pBuf) throws FileNotFoundException, IOException {
 		Head head = PageHead.createSecondHead(mPageManager, pBuf);
-		DataScanner ds = new DataScanner(mPageManager, head);
+		Iterator<ByteBuffer> ds = head.iterator();
 		if(ds.hasNext()) {
 			ByteBuffer bb = ds.next();
 			bb.order(ByteOrder.LITTLE_ENDIAN);
@@ -73,7 +73,7 @@ public class TableManager {
 
 	private void createTable(int pI) throws FileNotFoundException, IOException {
 		Head head = PageHead.createSecondHead(mPageManager, mPageManager.getPage(pI));
-		DataScanner ds = new DataScanner(mPageManager, head);
+		Iterator<ByteBuffer> ds = head.iterator();
 		StringBuilder sb = new StringBuilder();
 		while(ds.hasNext()) {
 			ByteBuffer bb = ds.next();

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ru.spb.awk.onec.core.PageManager;
@@ -128,5 +129,11 @@ public class PageHead extends FirstPage {
 		buff.position(i3);
 		buff.order(ByteOrder.LITTLE_ENDIAN);
 		return buff;
+	}
+
+	@Override
+	public Iterator<ByteBuffer> iterator() {
+		DataScanner scaner = new DataScanner(mManager, this);
+		return scaner;
 	}
 }

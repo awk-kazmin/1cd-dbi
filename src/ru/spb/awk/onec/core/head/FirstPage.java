@@ -1,6 +1,7 @@
 package ru.spb.awk.onec.core.head;
 
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 
 import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.Version;
@@ -90,6 +91,10 @@ public class FirstPage implements Head {
 
 	@Override
 	public ByteBuffer readBlock(int pIndx) {
+		return null;
+	}
+
+	public Iterator<ByteBuffer> iterator() {
 		return null;
 	}
 

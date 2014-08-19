@@ -15,15 +15,10 @@ public class BlobManager {
 
 
 	private static final int BLOCK_DATA_SIZE 	= 250;
-	private static final int BLOCKS_ON_PAGE 	= 16;
-	private static final int ALL_BLOCKS 		= 16368;
 	private static final int BLOB_BLOCK_SIZE 	= 256;
 	private Head head;
-	private PageManager pageManager;
-
 	public BlobManager(PageManager pPageManager, Table pT) throws FileNotFoundException, IOException {
 		head = PageHead.createSecondHead(pPageManager, pPageManager.getPage(pT.getBlobPage()), BLOB_BLOCK_SIZE);
-		pageManager = pPageManager;
 	}
 
 	public String getText(BlobAddr pAddr) throws FileNotFoundException, IOException {
@@ -57,7 +52,7 @@ public class BlobManager {
 		int clen = buff.getShort();
 		byte[] bufb = new byte[BLOCK_DATA_SIZE];
 		buff.get(bufb);
-		int length = Math.min(250, len); 
+		int length = Math.min(BLOCK_DATA_SIZE, len); 
 		if(clen!=0 && length>clen) length = clen;
 		blob.put(bufb, 0, length);
 		return nextblock;

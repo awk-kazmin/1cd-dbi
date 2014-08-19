@@ -26,7 +26,7 @@ public class BinIndexScanner implements Iterator<ByteBuffer> {
 		mIndex = pIndx;
 		try {
 			head = PageHead.createSecondHead(mPageManager, mPageManager.getPage(mTable.getIndexPage()));
-			DataScanner ds = new DataScanner(mPageManager, head);
+			Iterator<ByteBuffer> ds = head.iterator();
 			ByteBuffer indPage = ds.next();
 			indPage.order(ByteOrder.LITTLE_ENDIAN);
 			indPage.position(4 + 4 * mIndex.getPosition());

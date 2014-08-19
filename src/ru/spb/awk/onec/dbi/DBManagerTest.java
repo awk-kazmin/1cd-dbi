@@ -69,14 +69,7 @@ public class DBManagerTest {
 			assertNotNull(r);
 			System.out.println(r.toString());
 		}
-		Index i = t.getIndex("NAME");
-		records = db.getTableScaner(t, i);
-		for(Map<String, Object> r : records) {
-			assertNotNull(r);
-			System.out.println(r.get("VERNUM") + ":" + r.get("VERDATE"));
-			BlobAddr addr = (BlobAddr) r.get("COMMENT");
-			System.out.println(records.getText(addr));
-		}
+
 		t = db.getTable("VERSIONS");
 		assertNotNull(t);
 		records = db.getTableScaner(t);

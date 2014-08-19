@@ -18,14 +18,14 @@ public class RecordScanner implements Iterable<ByteBuffer>, Iterator<ByteBuffer>
 	private PageManager mPageManager;
 	private Table mTable;
 	private Head mTOCHead;
-	private DataScanner ds;
+	private Iterator<ByteBuffer> ds;
 	
 	public RecordScanner(PageManager pPageManager, Table pTable) throws FileNotFoundException, IOException {
 		mPageManager = pPageManager;
 		mTable = pTable;
-		ByteBuffer bb = mPageManager.getPage(mTable.getRecordPage());
+		ByteBuffer bb = mPageManager.getPage(pTable.getRecordPage());
 		mTOCHead = PageHead.createSecondHead(pPageManager, bb);
-		ds = new DataScanner(mPageManager, mTOCHead);
+		ds = mTOCHead.iterator();
 		if(ds.hasNext()) {
 			buffer = ds.next();
 			buffer.position(0);
