@@ -43,35 +43,10 @@ public class IndexScanner implements Iterator<ByteBuffer> {
 			int root_offset = indPageDescr.getInt()/0x1000;
 			int index_length = indPageDescr.getShort();
 			ByteBuffer indPage = head.readBlock(root_offset); // Страница индексов
-			int flags = indPage.getShort();
-			int count = indPage.getShort();
-			int prev_page = indPage.getInt();
-			int next_page = indPage.getInt();
-			if(flags == 3 || flags == 2) {
-				int freebytes = indPage.getShort(); // offset 12
-		        int numrecmask = indPage.getShort(); // offset 14
-		        int leftmask = indPage.getInt(); // offset 18
-		        int rightmask = indPage.getShort(); // offset 20
-		        int numrecbits = indPage.getShort(); // offset 22
-		        int leftbits = indPage.getShort(); // offset 24
-		        int rightbits = indPage.getShort(); // offset 26
-		        int recbytes = indPage.getShort(); // offset 28
-		        byte[] packed_index_data = new byte[4066]; // offset 30 (4066 = 0x1000 - 30)
-		        indPage.get(packed_index_data);
-			} else {
-				for(int i=0;i<count;i++) {
-					byte[] end_index = new byte[index_length];
-			        int end_table_record_index; // reverse byte order!
-			        int start_child_page; // reverse byte order!
-				}
-			}
+			IndexTree tree = IndexTree.createTree(indPage, index_length);
 		} catch (IOException except) {
 			except.printStackTrace();
 		}
-	}
-
-	private void skip(ByteBuffer pIndPage, int pIndxPos) {
-		pIndPage.position(pIndPage.position() + pIndxPos);
 	}
 
 	public ByteBuffer next() {

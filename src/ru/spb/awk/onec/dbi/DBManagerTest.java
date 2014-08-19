@@ -51,12 +51,12 @@ public class DBManagerTest {
 	@Test
 	public void testReadTableIndexes() throws IOException {
 		DB db = manager.open(f);
-		Table t = db.getTable("LASTESTVERSIONS");
+		Table t = db.getTable("USERS");
 		assertNotNull(t);
 		for(Index f : t.indexes()) {
 			assertNotNull(f);
 		}
-		Index i = t.getIndex("OBJID");
+		Index i = t.getIndex("PK");
 		Records records = db.getTableScaner(t, i);
 		for(Map<String, Object> r : records) {
 			assertNotNull(r);
