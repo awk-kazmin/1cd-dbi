@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ru.spb.awk.onec.core.DBManager;
+import ru.spb.awk.onec.core.tables.IndexHashMap;
 
 
 public class DBManagerTest {
@@ -51,7 +52,7 @@ public class DBManagerTest {
 	@Test
 	public void testReadTableIndexes() throws IOException {
 		DB db = manager.open(f);
-		Table t = db.getTable("USERS");
+		Table t = db.getTable("SELFREFS");
 		assertNotNull(t);
 		for(Index f : t.indexes()) {
 			assertNotNull(f);
@@ -60,6 +61,8 @@ public class DBManagerTest {
 		Records records = db.getTableScaner(t, i);
 		for(Map<String, Object> r : records) {
 			assertNotNull(r);
+			IndexHashMap<String, Object> nr = (IndexHashMap<String, Object>) r;
+			System.out.println(""+nr.getIndex()+":"+r.toString());
 		}
 		db.close();
 	}

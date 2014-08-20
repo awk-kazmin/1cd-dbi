@@ -1,12 +1,11 @@
 package ru.spb.awk.onec.core.tables;
 
-import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.scanners.IndexScanner;
+import ru.spb.awk.onec.core.scanners.IndexTree.Record;
 import ru.spb.awk.onec.dbi.Field;
 import ru.spb.awk.onec.dbi.Index;
 import ru.spb.awk.onec.dbi.Table;
@@ -35,13 +34,14 @@ public class RecordIndexManagerImpl extends RecordManagerImpl {
 			return val;
 		}
 
-		private Map<String, Object> nextCursor() {
+		private IndexHashMap<String, Object> nextCursor() {
 			if(indexScanner.hasNext()) {
-				ByteBuffer nextKey = indexScanner.next();
-				Map<String, Object> map = new HashMap<>();
+				Record nextKey = indexScanner.next();
+				IndexHashMap<String, Object> map = new IndexHashMap<>();
+				map.setIndex(nextKey.getIndex());
 				for(Field f : index) {
 					String name = f.getName();
-					Object val = f.getValue(nextKey);
+					Object val = f.getValue(nextKey.getRecord());
 					map.put(name, val);
 				}
 				return map;

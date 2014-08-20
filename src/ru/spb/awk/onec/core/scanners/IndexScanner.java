@@ -12,7 +12,7 @@ import ru.spb.awk.onec.core.head.PageHead;
 import ru.spb.awk.onec.dbi.Index;
 import ru.spb.awk.onec.dbi.Table;
 
-public class IndexScanner implements Iterator<ByteBuffer> {
+public class IndexScanner implements Iterator<IndexTree.Record> {
 
 	private PageManager mPageManager;
 	private Table mTable;
@@ -21,6 +21,7 @@ public class IndexScanner implements Iterator<ByteBuffer> {
 	private Head head;
 	private ByteBuffer declRootPage;
 	private int firstFreePage;
+	private IndexTree tree;
 
 	public IndexScanner(PageManager pPageManager, Table pTable, Index pIndx) {
 		mPageManager = pPageManager;
@@ -43,20 +44,19 @@ public class IndexScanner implements Iterator<ByteBuffer> {
 			int root_offset = indPageDescr.getInt()/0x1000;
 			int index_length = indPageDescr.getShort();
 			ByteBuffer indPage = head.readBlock(root_offset); // Страница индексов
-			IndexTree tree = IndexTree.createTree(indPage, index_length);
+			tree = IndexTree.createTree(indPage, index_length, head);
 		} catch (IOException except) {
 			except.printStackTrace();
 		}
 	}
 
-	public ByteBuffer next() {
-		// TODO Auto-generated method stub
-		return null;
+	public IndexTree.Record next() {
+		return tree.next();
 	}
 
 	@Override
 	public boolean hasNext() {
-		return false;
+		return tree.hasNext();
 	}
 
 }
