@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.head.Head;
-import ru.spb.awk.onec.core.head.PageHead;
+import ru.spb.awk.onec.core.head.HeadImpl;
 import ru.spb.awk.onec.dbi.Index;
 import ru.spb.awk.onec.dbi.Table;
 
@@ -28,7 +28,7 @@ public class IndexScanner implements Iterator<IndexTree.Record> {
 		mTable = pTable;
 		mIndex = pIndx;
 		try {
-			head = PageHead.createSecondHead(mPageManager, mPageManager.getPage(mTable.getIndexPage()));
+			head = HeadImpl.createSecondHead(mPageManager, mPageManager.getPage(mTable.getIndexPage()));
 			Iterator<ByteBuffer> iterator = head.iterator();
 			ByteBuffer root = iterator.next();
 			root.position(0);

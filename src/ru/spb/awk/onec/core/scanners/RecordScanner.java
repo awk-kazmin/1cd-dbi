@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.head.Head;
-import ru.spb.awk.onec.core.head.PageHead;
+import ru.spb.awk.onec.core.head.HeadImpl;
 import ru.spb.awk.onec.dbi.Table;
 
 public class RecordScanner implements Iterable<ByteBuffer>, Iterator<ByteBuffer> {
@@ -24,7 +24,7 @@ public class RecordScanner implements Iterable<ByteBuffer>, Iterator<ByteBuffer>
 		mPageManager = pPageManager;
 		mTable = pTable;
 		ByteBuffer bb = mPageManager.getPage(pTable.getRecordPage());
-		mTOCHead = PageHead.createSecondHead(pPageManager, bb);
+		mTOCHead = HeadImpl.createSecondHead(pPageManager, bb, pTable.getRecordLenght());
 		ds = mTOCHead.iterator();
 		if(ds.hasNext()) {
 			buffer = ds.next();

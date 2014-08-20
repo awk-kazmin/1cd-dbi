@@ -19,7 +19,7 @@ public class RecordIndexManagerImpl extends RecordManagerImpl {
 			cursor = nextCursor();
 		}
 
-		private Map<String, Object> cursor;
+		private IndexHashMap<String, Object> cursor;
 		private IndexScanner indexScanner;
 
 		@Override

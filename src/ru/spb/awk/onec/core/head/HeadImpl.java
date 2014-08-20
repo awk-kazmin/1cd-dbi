@@ -11,7 +11,7 @@ import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.Version;
 
 
-public class PageHead extends FirstPage {
+public class HeadImpl extends FirstPage {
 	
 
 	private static String readSign(ByteBuffer pBuffer, int len) {
@@ -27,19 +27,19 @@ public class PageHead extends FirstPage {
 		bb.position(0);
 		inst.mSign = readSign(bb, 8);
 		inst.mVerDB = new Version(bb.get(),bb.get(),bb.get(),bb.get());
-		inst.mPages = bb.getInt();
+		inst.mRecordsLength = bb.getInt();
 		inst.mVer = bb.getInt();
 		return inst;
 	}
 	
 	public static Head createSecondHead(PageManager pPageManager, ByteBuffer pByteBuffer) {
-		PageHead inst = new PageHead();
+		HeadImpl inst = new HeadImpl();
 		inst.mManager = pPageManager;
 		ByteBuffer bb = pByteBuffer;
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		bb.position(0);
 		inst.mSign = readSign(bb, 8);
-		inst.mPages = bb.getInt();
+		inst.mRecordsLength = bb.getInt();
 		inst.mVer = bb.getInt();
 		inst.mVer2 = bb.getInt();
 		inst.mVer = bb.getInt();
@@ -66,8 +66,9 @@ public class PageHead extends FirstPage {
 	private int mRecordsOnPage = 1;
 	private int mPagesOnRecord = 1;
 	private int mMaxBlocks	   = 1018*1023;
+	private long mCountRecords;
 
-	private PageHead() {
+	private HeadImpl() {
 
 	}
 	
@@ -89,7 +90,7 @@ public class PageHead extends FirstPage {
 	}
 
 	public static Head createSecondHead(PageManager pPageManager, ByteBuffer pPage, int pRecordSize) {
-		PageHead h = (PageHead) createSecondHead(pPageManager, pPage); 
+		HeadImpl h = (HeadImpl) createSecondHead(pPageManager, pPage); 
 		h.setRecordSize(pRecordSize);
 		return h;
 	}
@@ -99,6 +100,7 @@ public class PageHead extends FirstPage {
 		mRecordsOnPage  = 0x1000/mRecordSize;
 		mPagesOnRecord  = mRecordSize/0x1000;
 		mMaxBlocks		= super.getMaxBlocks() * 0x1000 / mRecordSize;
+		mCountRecords	= mRecordsLength / pRecordSize;
 	}
 
 	@Override
