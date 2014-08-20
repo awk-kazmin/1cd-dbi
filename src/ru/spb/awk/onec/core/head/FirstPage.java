@@ -11,7 +11,7 @@ public class FirstPage implements Head {
 	
 	String mSign;
 	Version mVerDB;
-	long mPages;
+	long mRecordsLength;
 	long mVer;
 	PageManager mManager;
 
@@ -24,7 +24,7 @@ public class FirstPage implements Head {
 	 */
 	@Override
 	public synchronized long getPages() {
-		return mPages;
+		return mRecordsLength;
 	}
 
 	/* (non-Javadoc)
@@ -32,7 +32,7 @@ public class FirstPage implements Head {
 	 */
 	@Override
 	public synchronized void setPages(long pPages) {
-		mPages = pPages;
+		mRecordsLength = pPages;
 	}
 
 	/* (non-Javadoc)

@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
 
 import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.head.Head;
-import ru.spb.awk.onec.core.head.PageHead;
+import ru.spb.awk.onec.core.head.HeadImpl;
 import ru.spb.awk.onec.dbi.BlobAddr;
 import ru.spb.awk.onec.dbi.Table;
 
@@ -18,7 +18,7 @@ public class BlobManager {
 	private static final int BLOB_BLOCK_SIZE 	= 256;
 	private Head head;
 	public BlobManager(PageManager pPageManager, Table pT) throws FileNotFoundException, IOException {
-		head = PageHead.createSecondHead(pPageManager, pPageManager.getPage(pT.getBlobPage()), BLOB_BLOCK_SIZE);
+		head = HeadImpl.createSecondHead(pPageManager, pPageManager.getPage(pT.getBlobPage()), BLOB_BLOCK_SIZE);
 	}
 
 	public String getText(BlobAddr pAddr) throws FileNotFoundException, IOException {

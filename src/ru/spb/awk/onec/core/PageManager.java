@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import ru.spb.awk.onec.core.head.Head;
-import ru.spb.awk.onec.core.head.PageHead;
+import ru.spb.awk.onec.core.head.HeadImpl;
 import ru.spb.awk.onec.core.tables.TableManager;
 
 
@@ -41,7 +41,7 @@ public class PageManager {
 		try (InputStream is = new FileInputStream(pFile)) {
 			byte[] buf = new byte[PAGE_SIZE];
 			is.read(buf);
-			mDBHead = PageHead.createFirstHead(ByteBuffer.wrap(buf));
+			mDBHead = HeadImpl.createFirstHead(ByteBuffer.wrap(buf));
 			is.read(buf);
 			mFPM = new FreePageManager(this, ByteBuffer.wrap(buf));
 			is.read(buf);

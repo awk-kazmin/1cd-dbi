@@ -12,7 +12,7 @@ import java.util.Map;
 
 import ru.spb.awk.onec.core.PageManager;
 import ru.spb.awk.onec.core.head.Head;
-import ru.spb.awk.onec.core.head.PageHead;
+import ru.spb.awk.onec.core.head.HeadImpl;
 import ru.spb.awk.onec.dbi.Table;
 import ru.spb.awk.onec.text.OneCParser;
 
@@ -32,7 +32,7 @@ public class TableManager {
 	}
 
 	private void setupPageManager(ByteBuffer pBuf) throws FileNotFoundException, IOException {
-		Head head = PageHead.createSecondHead(mPageManager, pBuf);
+		Head head = HeadImpl.createSecondHead(mPageManager, pBuf);
 		Iterator<ByteBuffer> ds = head.iterator();
 		if(ds.hasNext()) {
 			ByteBuffer bb = ds.next();
@@ -72,7 +72,7 @@ public class TableManager {
 	}
 
 	private void createTable(int pI) throws FileNotFoundException, IOException {
-		Head head = PageHead.createSecondHead(mPageManager, mPageManager.getPage(pI));
+		Head head = HeadImpl.createSecondHead(mPageManager, mPageManager.getPage(pI));
 		Iterator<ByteBuffer> ds = head.iterator();
 		StringBuilder sb = new StringBuilder();
 		while(ds.hasNext()) {
