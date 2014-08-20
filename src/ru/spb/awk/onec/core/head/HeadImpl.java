@@ -64,7 +64,7 @@ public class HeadImpl extends FirstPage {
 	private List<Integer> blocks = new ArrayList<>();
 	private int mRecordSize    = 0x1000;
 	private int mRecordsOnPage = 1;
-	private int mPagesOnRecord = 1;
+	private double mPagesOnRecord = 1;
 	private int mMaxBlocks	   = 1018*1023;
 	private long mCountRecords;
 
@@ -98,7 +98,7 @@ public class HeadImpl extends FirstPage {
 	private void setRecordSize(int pRecordSize) {
 		mRecordSize     = pRecordSize;
 		mRecordsOnPage  = 0x1000/mRecordSize;
-		mPagesOnRecord  = mRecordSize/0x1000;
+		mPagesOnRecord  = mRecordSize/0x1000 + (mRecordSize%0x1000>0?1:0);
 		mMaxBlocks		= super.getMaxBlocks() * 0x1000 / mRecordSize;
 		mCountRecords	= mRecordsLength / pRecordSize;
 	}
@@ -110,9 +110,13 @@ public class HeadImpl extends FirstPage {
 
 	@Override
 	public ByteBuffer readBlock(int pIndx) {
-		int i1 = pIndx / (1023 * mRecordsOnPage);
-		int i2 = (pIndx - i1) / mRecordsOnPage;
-		int i3 = (pIndx - i1 - i2) * mRecordSize;
+		int i1=0,i2=0,i3=0, offset=pIndx * mRecordSize;
+		i1 = (offset) / (1023 * 0x1000);
+		offset -= i1 * 1023 * 0x1000;
+		i2 = (offset) / (0x1000);
+		offset -= i2 * 0x1000;
+		i3 = offset;
+
 		try {
 			return getBlock(i1, i2, i3);
 		} catch (IOException e) {

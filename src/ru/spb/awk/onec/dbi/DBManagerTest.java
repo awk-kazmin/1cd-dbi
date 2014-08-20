@@ -63,6 +63,8 @@ public class DBManagerTest {
 			assertNotNull(r);
 			IndexHashMap<String, Object> nr = (IndexHashMap<String, Object>) r;
 			System.out.println(""+nr.getIndex()+":"+r.toString());
+			Map<String, Object> full = records.getRecord(nr.getIndex());
+			System.out.println(""+nr.getIndex()+":"+full.toString());
 		}
 		db.close();
 	}

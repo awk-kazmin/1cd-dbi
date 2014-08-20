@@ -9,4 +9,6 @@ public interface Records extends Iterable<Map<String, Object>> {
 
 	public abstract ByteBuffer getBlob(BlobAddr pAddr);
 
+	public abstract Map<String, Object> getRecord(int pIndex);
+
 }

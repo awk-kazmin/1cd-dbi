@@ -6,7 +6,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.sun.org.apache.bcel.internal.classfile.PMGClass;
+
 import ru.spb.awk.onec.core.PageManager;
+import ru.spb.awk.onec.core.head.Head;
+import ru.spb.awk.onec.core.head.HeadImpl;
 import ru.spb.awk.onec.core.scanners.RecordScanner;
 import ru.spb.awk.onec.dbi.BlobAddr;
 import ru.spb.awk.onec.dbi.Field;
@@ -50,31 +54,7 @@ public class RecordManagerImpl implements  Records {
 			if(!rs.hasNext()) return c;
 			ByteBuffer record = rs.next();
 
-			c = new HashMap<>();
-			if(mTable.haveVersionField()) {
-				byte[] ver = new byte[16];
-				record.get(ver);
-			} else if(mTable.haveRecordLock()) {
-				record.getLong();
-			}
-				
-			for(Field f : mTable) {
-				if(!f.isVersionField()) {
-					Object val = null;
-					if(f.isNullable()) {
-						if(record.get() == 0) { 
-							f.getValue(record);
-						} else {
-							val = f.getValue(record);
-						}
-					} else {
-						val = f.getValue(record);
-					}
-
-					c.put(f.getName(), val);
-				}
-			}
-			return c;
+			return createRecord(record);
 		}
 
 	}
@@ -82,6 +62,7 @@ public class RecordManagerImpl implements  Records {
 	protected Table mTable;
 	protected PageManager mPageManager;
 	private BlobManager mMan;
+	private Head head;
 
 
 	public RecordManagerImpl(PageManager pPageManager, Table pT) {
@@ -89,6 +70,7 @@ public class RecordManagerImpl implements  Records {
 		mTable = pT;
 		try {
 			mMan = new BlobManager(mPageManager, mTable);
+			head = HeadImpl.createSecondHead(pPageManager, mPageManager.getPage(mTable.getRecordPage()), mTable.getRecordLenght());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -125,6 +107,41 @@ public class RecordManagerImpl implements  Records {
 			e.printStackTrace();
 			return null;
 		}	
+	}
+
+	@Override
+	public Map<String, Object> getRecord(int pIndex) {
+		ByteBuffer readBlock = head.readBlock(pIndex);
+		readBlock.get();
+		return createRecord(readBlock);
+	}
+
+	private Map<String, Object> createRecord(ByteBuffer record) {
+		Map<String, Object> c = new HashMap<>();
+		if(mTable.haveVersionField()) {
+			byte[] ver = new byte[16];
+			record.get(ver);
+		} else if(mTable.haveRecordLock()) {
+			record.getLong();
+		}
+			
+		for(Field f : mTable) {
+			if(!f.isVersionField()) {
+				Object val = null;
+				if(f.isNullable()) {
+					if(record.get() == 0) { 
+						f.getValue(record);
+					} else {
+						val = f.getValue(record);
+					}
+				} else {
+					val = f.getValue(record);
+				}
+
+				c.put(f.getName(), val);
+			}
+		}
+		return c;
 	}
 
 }
