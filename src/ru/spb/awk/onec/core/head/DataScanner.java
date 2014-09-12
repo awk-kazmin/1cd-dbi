@@ -17,7 +17,7 @@ class DataScanner implements Iterator<ByteBuffer> {
 
 		public ArrayScaner(ByteBuffer data) {
 			data.order(ByteOrder.LITTLE_ENDIAN);
-			data.position(0);
+			data.rewind();
 			int len = data.getInt();
 			mData = new int[len];
 			for(int i = 0; i<len; i++){

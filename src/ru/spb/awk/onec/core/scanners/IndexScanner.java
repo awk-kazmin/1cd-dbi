@@ -31,7 +31,7 @@ public class IndexScanner implements Iterator<IndexTree.Record> {
 			head = HeadImpl.createSecondHead(mPageManager, mPageManager.getPage(mTable.getIndexPage()));
 			Iterator<ByteBuffer> iterator = head.iterator();
 			ByteBuffer root = iterator.next();
-			root.position(0);
+			root.rewind();
 			root.order(ByteOrder.LITTLE_ENDIAN);
 			int free = root.getInt();
 			int ind = root.getInt()/0x1000;

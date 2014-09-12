@@ -37,7 +37,7 @@ public class TableManager {
 		if(ds.hasNext()) {
 			ByteBuffer bb = ds.next();
 			bb.order(ByteOrder.LITTLE_ENDIAN);
-			bb.position(0);
+			bb.rewind();
 			byte[] cbuf = new byte[32];
 			bb.get(cbuf);
 			mEncoding = new String(cbuf).trim();
@@ -47,7 +47,7 @@ public class TableManager {
 					if(ds.hasNext()) {
 						bb = ds.next();
 						bb.order(ByteOrder.LITTLE_ENDIAN);
-						bb.position(0);
+						bb.rewind();
 					} else break;
 				}
 				createTable(bb.getInt());
@@ -78,7 +78,7 @@ public class TableManager {
 		while(ds.hasNext()) {
 			ByteBuffer bb = ds.next();
 			bb.order(ByteOrder.LITTLE_ENDIAN);
-			bb.position(0);
+			bb.rewind();
 			while(bb.position() < bb.limit()-2) {
 				sb.appendCodePoint(bb.getShort());
 			}

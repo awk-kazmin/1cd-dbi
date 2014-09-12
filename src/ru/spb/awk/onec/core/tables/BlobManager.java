@@ -40,7 +40,7 @@ public class BlobManager {
 			len-=250;
 			next = readBlock(next, len, blob);
 		}
-		blob.position(0);
+		blob.rewind();
 		blob.order(ByteOrder.LITTLE_ENDIAN);
 		return blob;
 	}

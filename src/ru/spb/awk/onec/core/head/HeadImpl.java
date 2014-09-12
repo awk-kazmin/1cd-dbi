@@ -24,7 +24,7 @@ public class HeadImpl extends FirstPage {
 		FirstPage inst = new FirstPage();
 		ByteBuffer bb = pByteBuffer;
 		bb.order(ByteOrder.LITTLE_ENDIAN);
-		bb.position(0);
+		bb.rewind();
 		inst.mSign = readSign(bb, 8);
 		inst.mVerDB = new Version(bb.get(),bb.get(),bb.get(),bb.get());
 		inst.mRecordsLength = bb.getInt();
@@ -37,7 +37,7 @@ public class HeadImpl extends FirstPage {
 		inst.mManager = pPageManager;
 		ByteBuffer bb = pByteBuffer;
 		bb.order(ByteOrder.LITTLE_ENDIAN);
-		bb.position(0);
+		bb.rewind();
 		inst.mSign = readSign(bb, 8);
 		inst.mRecordsLength = bb.getInt();
 		inst.mVer = bb.getInt();

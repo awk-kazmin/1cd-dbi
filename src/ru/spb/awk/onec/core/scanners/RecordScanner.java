@@ -28,7 +28,7 @@ public class RecordScanner implements Iterable<ByteBuffer>, Iterator<ByteBuffer>
 		ds = mTOCHead.iterator();
 		if(ds.hasNext()) {
 			buffer = ds.next();
-			buffer.position(0);
+			buffer.rewind();
 			cursor = getNext();
 		}
 
@@ -56,7 +56,7 @@ public class RecordScanner implements Iterable<ByteBuffer>, Iterator<ByteBuffer>
 		if(last == 0) {
 			if(ds.hasNext()) {
 				buffer = ds.next();
-				buffer.position(0);
+				buffer.rewind();
 			} else {
 				return null;
 			}
@@ -66,7 +66,7 @@ public class RecordScanner implements Iterable<ByteBuffer>, Iterator<ByteBuffer>
 			if(ds.hasNext()) {
 				buffer.get(b,0,last);
 				buffer = ds.next();
-				buffer.position(0);
+				buffer.rewind();
 				buffer.get(b,last,b.length-last);
 			} else {
 				return null;
